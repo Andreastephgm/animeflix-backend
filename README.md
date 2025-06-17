@@ -1,22 +1,23 @@
 # AnimeFlix - Backend 🎬
 
-Este es el backend del proyecto **AnimeFlix**, desarrollado con Java + Spring Boot y utilizando MySQL como base de datos relacional. Se proporciona un entorno con Docker para facilitar la ejecución, junto con phpMyAdmin para gestión visual.
+This is the backend for the **AnimeFlix** project, built with Java + Spring Boot and using MySQL as the relational database. It includes a Docker-based development environment with phpMyAdmin for easy database management.
 
 ---
 
-## 🐳 Iniciar con Docker
+## 🐳 Getting Started with Docker
 
-### 📦 Requisitos
+### 📦 Requirements
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) instalado en tu equipo.
-- Docker Compose habilitado.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed on your machine.
+- Docker Compose enabled.
 
 ---
 
-### 🚀 Instrucciones
+### 🚀 How to Run
 
-1. Clona el repositorio:
+1. Clone this repository:
 
 ```bash
 git clone https://github.com/Andreastephgm/animeflix-backend.git
 cd animeflix-backend
+
