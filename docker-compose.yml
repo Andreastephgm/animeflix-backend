@@ -1,26 +1,24 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  db:
-    image: mysql:8.0
-    container_name: animeflix_mysql
-    restart: always
+  mongodb:
+    image: mongo:latest
+    container_name: animeflix-mongo
     ports:
-      - "3307:3306"
+      - "27017:27017"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MONGO_INITDB_DATABASE: animeflix
     volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mongo_data:/data/db
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: animeflix_phpmyadmin
-    restart: always
+  backend:
+    build: .
+    container_name: animeflix-backend
     ports:
-      - "8080:80"
+      - "8080:8080"
     environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/animeflix-backend
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
