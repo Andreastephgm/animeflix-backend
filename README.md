@@ -1,111 +1,85 @@
 # AnimeFlix - Backend 🎬
 
-This is the backend for the **AnimeFlix** project, built with Java + Spring Boot and using MySQL as the relational database. It includes a Docker-based development environment with phpMyAdmin for easy database management.
+This is the backend for the **AnimeFlix** project, built with Java and Spring Boot, strictly following **Hexagonal Architecture (Ports and Adapters)** principles. It uses **MongoDB** as a NoSQL database and is ready for containerized local development.
 
 ---
 
-## 🐳 Getting Started with Docker
+## 🏗️ Project Architecture
 
-### 📦 Requirements
+The project follows Hexagonal Architecture to keep the business logic completely decoupled from external infrastructure concerns (such as databases or web frameworks):
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed on your machine.
-- Docker Compose enabled.
+```text
+animeflix-backend/
+├── src/
+│   └── main/
+│       └── java/
+│           └── com/animeflix/animeflix/
+│               ├── AnimeflixApplication.java
+│               ├── application/
+│               │   ├── port/
+│               │   │   ├── in/       # Input use case interfaces
+│               │   │   └── out/      # Output repository ports
+│               │   └── usecase/      # Business logic implementations
+│               ├── domain/           # Pure domain entities
+│               └── infrastructure/
+│                   ├── persistence/
+│                   │   ├── adapters/ # Repository adapters (MongoDB)
+│                   │   ├── documents/# MongoDB persistence models (@Document)
+│                   │   ├── mappers/  # Mappers between Domain and Documents
+│                   │   └── repository/# Spring Data MongoDB interfaces
+│                   └── rest/         # REST Controllers
+```
+## <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="48" height="48" /> Docker Getting Started with Docker
 
----
+📦 Prerequisites:
+Docker Desktop installed on your machine.
+Maven (or using the included wrapper ./mvnw).
 
-### 🚀 How to Run
-
+## 🚀 How to Run
 1. Clone this repository:
 
-   ```bash
-   git clone https://github.com/Andreastephgm/animeflix-backend.git
-   cd animeflix-backend
-   ```
+```bash 
+git clone [https://github.com/Andreastephgm/animeflix-backend.git](https://github.com/Andreastephgm/animeflix-backend.git)
+cd animeflix-backend
+```
 
-2. Create `.env` file:
+2. Start MongoDB via Docker:
+   Run the following command in your terminal to start a local MongoDB container on port 27017:
 
-   Create a `.env` file in the root directory with the following content:
+```bash
+docker run -d -p 27017:27017 --name anime-mongo mongo:latest
+```
 
-   ```env
-   MYSQL_ROOT_PASSWORD=root123
-   MYSQL_DATABASE=animeflix
-   MYSQL_USER=admin
-   MYSQL_PASSWORD=admin123
-   ```
+3. Configure application.properties:
+   Ensure your src/main/resources/application.properties points correctly to your MongoDB instance:
 
-3. Docker Setup:
+```bash
+spring.application.name=animeflix
+spring.data.mongodb.uri=mongodb://localhost:27017/animeflix-backend
+server.port=8080
+```
 
-   Make sure you have Docker and Docker Compose installed.  
-   To start the MySQL and phpMyAdmin containers, run:
+4. Run the Spring Boot Application:
+   Use the included Maven Wrapper in the project to compile and run the server:
 
-   ```bash
-   docker compose up
-   ```
+```bash
+./mvnw spring-boot:run
+```
 
-4. Access phpMyAdmin:
-
-   Open your browser and go to: [http://localhost:8080](http://localhost:8080)  
-   Use these credentials to log in:
-
-   - Server: `db`  
-   - Username: `admin`  
-   - Password: `admin123`
-
-5. Configure Spring Boot datasource:
-
-   Set your `application.properties` or `application.yml` to connect to the database:
-
-   ```properties
-   spring.datasource.url=jdbc:mysql://db:3306/animeflix
-   spring.datasource.username=admin
-   spring.datasource.password=admin123
-   spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-   ```
-
-6. Project Structure Overview:
-
-   ```
-   animeflix-backend/
-   ├── database/
-   │   └── init.sql
-   ├── docker-compose.yml
-   ├── .env
-   ├── src/
-   │   └── main/
-   │       └── java/
-   │           └── com/animeflix/animeflix/
-   │               ├── AnimeflixApplication.java
-   │               ├── model/
-   │               ├── controller/
-   │               ├── repository/
-   │               └── service/
-   ```
-
-7. Push your code to GitHub:
-
-   ```bash
-   git init
-   git remote add origin https://github.com/YourUsername/animeflix-backend.git
-   git add .
-   git commit -m "Initial commit with backend and Docker setup"
-   git push -u origin main
-   ```
-
-8. Replace `YourUsername` with your GitHub username.
-
----
-
+5. Test the Endpoints (Full CRUD):
+   You can use Postman to interact with the following endpoints exposed at http://localhost:8080/api/animes:
+```text
+POST /api/animes/new - Create a new anime.
+GET /api/animes/all - List all anime records.
+GET /api/animes/{id} - Find an anime by its ID.
+PUT /api/animes/{id} - Update an existing anime.
+DELETE /api/animes/{id} - Delete an anime.
+```
 ## 👩🏻 Developer
+Andrea Stefanny García Mejía
 
-**Andrea Stefanny García Mejía**  
-GitHub: [https://github.com/Andreastephgm](https://github.com/Andreastephgm)
-
----
+## [![GitHub](https://img.shields.io/badge/GitHub-381717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Andreastephgm)[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/andreastefannydev/)
 
 ## 📝 License
-
 This project is licensed under the MIT License.
 
